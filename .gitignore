@@ -1,1 +1,5 @@
 /node_modules
+/tmp
+/test/bin
+/test/libexec
+/test/share
