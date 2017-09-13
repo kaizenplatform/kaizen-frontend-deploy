@@ -17,44 +17,44 @@ const awsConfigurations = [
     cliOption: '--aws-access-key-id',
     envVar: 'AWS_ACCESS_KEY_ID',
     description: 'AWS Access Key ID',
-    required: true,
+    required: true
   },
   {
     cliOption: '--aws-secret-access-key',
     envVar: 'AWS_SECRET_ACCESS_KEY',
     description: 'AWS secret key',
-    required: true,
+    required: true
   },
   {
     cliOption: '--s3-region',
     envVar: 'S3_REGION',
     description: 'S3 region name',
-    required: true,
+    required: true
   },
   {
     cliOption: '--s3-bucket',
     envVar: 'S3_BUCKET',
     description: 'S3 bucket name',
-    required: true,
+    required: true
   },
   {
     cliOption: '--cloudfront-distribution-id',
     envVar: 'CLOUDFRONT_DISTRIBUTION_ID',
     description: 'CloudFront distribution ID',
-    required: true,
+    required: true
   },
   {
     cliOption: '--s3-prefix',
     envVar: 'S3_PREFIX',
     description: 'Prefix which is added to the s3 directory',
-    required: false,
+    required: false
   },
   {
     cliOption: '--s3-delete-removed',
     envVar: 'S3_DELETE_REMOVED',
     description: 'Whether to remove s3 objects (default false)',
-    required: false,
-  },
+    required: false
+  }
 ]
 
 const program = new commander.Command(packageJson.name)
@@ -101,9 +101,7 @@ if (missingConfigurations.length > 0) {
   console.log()
   console.log(`    Please check the readme file for more details:`)
   console.log(
-    `      ${chalk.cyan(
-      'https://github.com/kaizenplatform/kaizen-frontend-deploy#aws-credentials-and-configurations',
-    )}`,
+    `      ${chalk.cyan('https://github.com/kaizenplatform/kaizen-frontend-deploy#aws-credentials-and-configurations')}`
   )
   process.exit(1)
 }
@@ -123,7 +121,7 @@ const main = async (localDir, s3Prefix) => {
       AWS_ACCESS_KEY_ID,
       AWS_SECRET_ACCESS_KEY,
       CLOUDFRONT_DISTRIBUTION_ID,
-      S3_PREFIX,
+      S3_PREFIX
     )
   } catch (e) {
     console.error(e)
