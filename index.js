@@ -93,7 +93,7 @@ awsConfigurations.forEach(conf => {
 
 if (missingConfigurations.length > 0) {
   console.log()
-  console.error(chalk.red(`Please pass the AWS Confidentials and Configurations:`))
+  console.error(chalk.red(`Please pass the AWS Credentials and Configurations:`))
   console.log()
   missingConfigurations.forEach(conf => {
     console.log(`  - ${conf.description}: ${chalk.cyan(conf.cliOption)} or ${chalk.cyan(conf.envVar)}`)
