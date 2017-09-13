@@ -2,6 +2,12 @@
 
 CLI tool for deploying SPA to Amazon S3 and CloudFront
 
+## Installation
+
+```bash
+$ npm install --save-dev kaizenplatform/kaizen-frontend-deploy
+```
+
 ## Usage
 
 ```bash
