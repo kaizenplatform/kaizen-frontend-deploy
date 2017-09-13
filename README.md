@@ -62,3 +62,7 @@ $ npm version [major | minor | patch] # see https://docs.npmjs.com/cli/version f
 $ git push
 $ git push --tags
 ```
+
+## References
+
+- [[engineering] kaizen-frontend-deploy というコマンドラインツールを作った](https://kaizen.qiita.com/jimbo/items/6ce7278926fdccce406d)
