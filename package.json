@@ -8,7 +8,6 @@
     "kaizen-frontend-deploy": "./index.js"
   },
   "scripts": {
-    "postinstall": "scripts/install-bats.sh",
     "test": "test/bin/bats test/index.spec.sh"
   },
   "dependencies": {

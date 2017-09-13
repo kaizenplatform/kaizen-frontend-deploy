@@ -31,6 +31,7 @@ The CLI looks for AWS credentials and configuration settings in the following or
 
 ```bash
 $ npm install
+$ ./scripts/install-bats.sh  # Install Bats for testing
 ```
 
 ### Testing
