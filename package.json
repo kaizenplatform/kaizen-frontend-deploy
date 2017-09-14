@@ -8,7 +8,8 @@
     "kaizen-frontend-deploy": "./index.js"
   },
   "scripts": {
-    "test": "test/bin/bats test/index.spec.sh"
+    "test": "test/bin/bats test/index.spec.sh",
+    "lint": "eslint index.js lib"
   },
   "dependencies": {
     "aws-sdk": "^2.111.0",
@@ -17,5 +18,13 @@
     "commander": "^2.11.0",
     "recursive-readdir": "^2.2.1",
     "s3": "^4.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }
