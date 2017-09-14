@@ -1,9 +1,12 @@
 {
   "name": "kaizen-frontend-deploy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "CLI tool for deploying SPA to Amazon S3 and CloudFront",
-  "files": ["index.js", "lib/"],
+  "files": [
+    "index.js",
+    "lib/"
+  ],
   "bin": {
     "kaizen-frontend-deploy": "./index.js"
   },
