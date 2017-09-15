@@ -53,11 +53,12 @@ $ ./scripts/install-bats.sh  # Install Bats for testing
 $ npm run test
 ```
 
-### Release new versions
+### Releasing a new version
 
 Please follow by [SemVer](http://semver.org/) to decide the version number.
 
 ```bash
+$ git checkout master
 $ npm version [major | minor | patch] # see https://docs.npmjs.com/cli/version for more details
 ```
 
