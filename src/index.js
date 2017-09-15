@@ -8,7 +8,7 @@ const camelcase = require('camelcase')
 
 const s3 = require('./lib/s3')
 const cloudfront = require('./lib/cloudfront')
-const packageJson = require('./package.json')
+const packageJson = require('../package.json')
 
 let localDir
 

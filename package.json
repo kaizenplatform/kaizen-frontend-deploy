@@ -3,14 +3,12 @@
   "version": "0.0.2",
   "private": true,
   "description": "CLI tool for deploying SPA to Amazon S3 and CloudFront",
-  "files": [
-    "index.js",
-    "lib/"
-  ],
+  "files": ["dist/"],
   "bin": {
-    "kaizen-frontend-deploy": "./index.js"
+    "kaizen-frontend-deploy": "./dist/index.js"
   },
   "scripts": {
+    "build": "babel src -d dist",
     "test": "test/bin/bats test/index.spec.sh",
     "lint": "eslint index.js lib"
   },
@@ -23,6 +21,9 @@
     "s3": "^4.4.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "conventional-changelog-cli": "^1.3.3",
     "eslint": "^4.6.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
