@@ -59,8 +59,6 @@ Please follow by [SemVer](http://semver.org/) to decide the version number.
 
 ```bash
 $ npm version [major | minor | patch] # see https://docs.npmjs.com/cli/version for more details
-$ git push
-$ git push --tags
 ```
 
 ## References

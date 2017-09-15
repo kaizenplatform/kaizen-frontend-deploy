@@ -1,7 +1,10 @@
-# 0.0.2
+<a name="0.0.2"></a>
+## [0.0.2](https://github.com/kaizenplatform/kaizen-frontend-deploy/compare/v0.0.1...v0.0.2) (2017-09-14)
 
-- Remove trailing commas ([#1](https://github.com/kaizenplatform/kaizen-frontend-deploy/pull/1))
 
-# 0.0.1
 
-Initial release
+<a name="0.0.1"></a>
+## 0.0.1 (2017-09-13)
+
+
+
