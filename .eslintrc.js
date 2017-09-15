@@ -1,3 +1,4 @@
 module.exports = {
-    "extends": "standard"
+  extends: 'prettier',
+  parser: 'babel-eslint',
 };
