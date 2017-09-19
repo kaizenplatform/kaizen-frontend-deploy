@@ -103,7 +103,8 @@ const S3_PREFIX = program.s3Prefix || process.env.S3_PREFIX;
 const CLOUDFRONT_DISTRIBUTION_ID = program.cloudfrontDistributionId || process.env.CLOUDFRONT_DISTRIBUTION_ID;
 
 const dir = localDir.replace(/\/$/, '');
-const s3Prefix = S3_PREFIX.replace(/\/$/, '');
+let s3Prefix = S3_PREFIX.replace(/\/$/, '');
+s3Prefix = s3Prefix.match(/^\//) ? s3Prefix : `/${s3Prefix}`;
 
 const main = (() => {
   var _ref = _asyncToGenerator(function* () {
