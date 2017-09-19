@@ -115,19 +115,17 @@ const S3_BUCKET = program.s3Bucket || process.env.S3_BUCKET;
 const S3_PREFIX = program.s3Prefix || process.env.S3_PREFIX;
 const CLOUDFRONT_DISTRIBUTION_ID = program.cloudfrontDistributionId || process.env.CLOUDFRONT_DISTRIBUTION_ID;
 
-const main = async (localDir, s3Prefix) => {
+const dir = localDir.replace(/\/$/, '');
+let s3Prefix = S3_PREFIX.replace(/\/$/, '');
+s3Prefix = s3Prefix.match(/^\//) ? s3Prefix : `/${s3Prefix}`;
+
+const main = async () => {
   try {
-    await s3.upload(localDir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_REGION, S3_BUCKET, S3_PREFIX);
-    await cloudfront.invalidate(
-      localDir,
-      AWS_ACCESS_KEY_ID,
-      AWS_SECRET_ACCESS_KEY,
-      CLOUDFRONT_DISTRIBUTION_ID,
-      S3_PREFIX,
-    );
+    await s3.upload(dir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_REGION, S3_BUCKET, s3Prefix);
+    await cloudfront.invalidate(dir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, CLOUDFRONT_DISTRIBUTION_ID, s3Prefix);
   } catch (e) {
     console.error(e);
   }
 };
 
-main(localDir, program.s3Prefix);
+main();
