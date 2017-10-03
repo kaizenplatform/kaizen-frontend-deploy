@@ -5,6 +5,7 @@
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+const path = require('path');
 const commander = require('commander');
 const chalk = require('chalk');
 const camelcase = require('camelcase');
@@ -53,7 +54,7 @@ const awsConfigurations = [{
 }];
 
 const program = new commander.Command(packageJson.name).version(packageJson.version).arguments('<local-directory>').usage(`${chalk.green('<local-directory>')} [options]`).action(dir => {
-  localDir = dir;
+  localDir = path.resolve(process.cwd(), dir);
 });
 
 awsConfigurations.forEach(conf => {
@@ -102,18 +103,11 @@ const S3_BUCKET = program.s3Bucket || process.env.S3_BUCKET;
 const S3_PREFIX = program.s3Prefix || process.env.S3_PREFIX;
 const CLOUDFRONT_DISTRIBUTION_ID = program.cloudfrontDistributionId || process.env.CLOUDFRONT_DISTRIBUTION_ID;
 
-const dir = localDir.replace(/\/$/, '');
-let s3Prefix = '';
-if (S3_PREFIX) {
-  s3Prefix = S3_PREFIX.replace(/\/$/, '');
-  s3Prefix = s3Prefix.match(/^\//) ? s3Prefix : `/${s3Prefix}`;
-}
-
 const main = (() => {
   var _ref = _asyncToGenerator(function* () {
     try {
-      yield s3.upload(dir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_REGION, S3_BUCKET, s3Prefix);
-      yield cloudfront.invalidate(dir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, CLOUDFRONT_DISTRIBUTION_ID, s3Prefix);
+      const uploadedFiles = yield s3.upload(localDir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_REGION, S3_BUCKET, S3_PREFIX);
+      yield cloudfront.invalidate(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, CLOUDFRONT_DISTRIBUTION_ID, S3_PREFIX, uploadedFiles);
     } catch (e) {
       console.error(e);
     }

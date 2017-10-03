@@ -19,6 +19,7 @@ module.exports = {
           }
         });
 
+        const uploadedFiles = [];
         const params = {
           localDir: localDir,
           s3Params: {
@@ -27,6 +28,7 @@ module.exports = {
             Prefix: s3Prefix
           }
         };
+        console.log(localDir, params.s3Params);
         const uploader = client.uploadDir(params);
         uploader.on('error', function (err) {
           console.error(chalk.red('unable to sync:'), err.stack);
@@ -35,12 +37,13 @@ module.exports = {
         });
 
         uploader.on('fileUploadEnd', function (localFilePath, s3Key) {
-          console.log(chalk.green('Uploaded'), localFilePath);
+          console.log(chalk.green('Uploaded'), `${localFilePath} -> ${s3Key}`);
+          uploadedFiles.push(s3Key);
         });
 
         uploader.on('end', function () {
           console.log('✨  Done.');
-          resolve();
+          resolve(uploadedFiles);
         });
       });
     });
