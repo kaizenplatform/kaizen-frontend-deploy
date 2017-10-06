@@ -2,6 +2,7 @@
 
 'use strict';
 
+const path = require('path');
 const commander = require('commander');
 const chalk = require('chalk');
 const camelcase = require('camelcase');
@@ -62,7 +63,7 @@ const program = new commander.Command(packageJson.name)
   .arguments('<local-directory>')
   .usage(`${chalk.green('<local-directory>')} [options]`)
   .action(dir => {
-    localDir = dir;
+    localDir = path.resolve(process.cwd(), dir);
   });
 
 awsConfigurations.forEach(conf => {
@@ -115,17 +116,23 @@ const S3_BUCKET = program.s3Bucket || process.env.S3_BUCKET;
 const S3_PREFIX = program.s3Prefix || process.env.S3_PREFIX;
 const CLOUDFRONT_DISTRIBUTION_ID = program.cloudfrontDistributionId || process.env.CLOUDFRONT_DISTRIBUTION_ID;
 
-const dir = localDir.replace(/\/$/, '');
-let s3Prefix = '';
-if (S3_PREFIX) {
-  s3Prefix = S3_PREFIX.replace(/\/$/, '');
-  s3Prefix = s3Prefix.match(/^\//) ? s3Prefix : `/${s3Prefix}`;
-}
-
 const main = async () => {
   try {
-    await s3.upload(dir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_REGION, S3_BUCKET, s3Prefix);
-    await cloudfront.invalidate(dir, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, CLOUDFRONT_DISTRIBUTION_ID, s3Prefix);
+    const uploadedFiles = await s3.upload(
+      localDir,
+      AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY,
+      S3_REGION,
+      S3_BUCKET,
+      S3_PREFIX,
+    );
+    await cloudfront.invalidate(
+      AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY,
+      CLOUDFRONT_DISTRIBUTION_ID,
+      S3_PREFIX,
+      uploadedFiles,
+    );
   } catch (e) {
     console.error(e);
   }
