@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "babel src -d dist",
-    "test": "test/bin/bats test/index.spec.sh",
+    "test": "npm run build && npm link && test/bin/bats test/index.spec.sh",
     "fmt": "prettier --write 'src/**/*.js'",
     "lint": "prettier --list-different 'src/**/*.js' && eslint src",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
