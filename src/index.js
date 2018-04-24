@@ -18,42 +18,56 @@ const awsConfigurations = [
     cliOption: '--aws-access-key-id',
     envVar: 'AWS_ACCESS_KEY_ID',
     description: 'AWS Access Key ID',
+    boolean: false,
     required: true,
   },
   {
     cliOption: '--aws-secret-access-key',
     envVar: 'AWS_SECRET_ACCESS_KEY',
     description: 'AWS secret key',
+    boolean: false,
     required: true,
   },
   {
     cliOption: '--s3-region',
     envVar: 'S3_REGION',
     description: 'S3 region name',
+    boolean: false,
     required: true,
   },
   {
     cliOption: '--s3-bucket',
     envVar: 'S3_BUCKET',
     description: 'S3 bucket name',
+    boolean: false,
     required: true,
   },
   {
     cliOption: '--cloudfront-distribution-id',
     envVar: 'CLOUDFRONT_DISTRIBUTION_ID',
     description: 'CloudFront distribution ID',
+    boolean: false,
     required: true,
   },
   {
     cliOption: '--s3-prefix',
     envVar: 'S3_PREFIX',
     description: 'Prefix which is added to the s3 directory',
+    boolean: false,
     required: false,
   },
   {
     cliOption: '--s3-delete-removed',
     envVar: 'S3_DELETE_REMOVED',
     description: 'Whether to remove s3 objects (default false)',
+    boolean: true,
+    required: false,
+  },
+  {
+    cliOption: '--skip-cloudfront',
+    envVar: 'SKIP_CLOUDFRONT',
+    description: 'Whether to skip cloudfront invalidation (default false)',
+    boolean: true,
     required: false,
   },
 ];
@@ -67,7 +81,11 @@ const program = new commander.Command(packageJson.name)
   });
 
 awsConfigurations.forEach(conf => {
-  program.option(`${conf.cliOption} <value>`, conf.description);
+  if (conf.boolean) {
+    program.option(conf.cliOption, conf.description);
+  } else {
+    program.option(`${conf.cliOption} <value>`, conf.description);
+  }
 });
 
 program.parse(process.argv);
@@ -86,6 +104,9 @@ if (typeof localDir === 'undefined') {
 const missingConfigurations = [];
 awsConfigurations.forEach(conf => {
   if (conf.required) {
+    if (program.skipCloudfront === true && conf.envVar === 'CLOUDFRONT_DISTRIBUTION_ID') {
+      return; // Exit if no skip option and no cloudfront distribution id
+    }
     if (typeof program[camelcase(conf.cliOption)] === 'undefined' && typeof process.env[conf.envVar] === 'undefined') {
       missingConfigurations.push(conf);
     }
@@ -115,6 +136,7 @@ const S3_REGION = program.s3Region || process.env.S3_REGION;
 const S3_BUCKET = program.s3Bucket || process.env.S3_BUCKET;
 const S3_PREFIX = program.s3Prefix || process.env.S3_PREFIX;
 const CLOUDFRONT_DISTRIBUTION_ID = program.cloudfrontDistributionId || process.env.CLOUDFRONT_DISTRIBUTION_ID;
+const SKIP_CLOUDFRONT = program.skipCloudfront || process.env.SKIP_CLOUDFRONT;
 
 const main = async () => {
   try {
@@ -126,6 +148,11 @@ const main = async () => {
       S3_BUCKET,
       S3_PREFIX,
     );
+
+    if (SKIP_CLOUDFRONT) {
+      return;
+    }
+
     await cloudfront.invalidate(
       AWS_ACCESS_KEY_ID,
       AWS_SECRET_ACCESS_KEY,
