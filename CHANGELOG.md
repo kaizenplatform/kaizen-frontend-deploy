@@ -1,3 +1,8 @@
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/kaizenplatform/kaizen-frontend-deploy/compare/v0.0.5...v0.1.0) (2018-04-24)
+
+
+
 <a name="0.0.5"></a>
 ## [0.0.5](https://github.com/kaizenplatform/kaizen-frontend-deploy/compare/v0.0.4...v0.0.5) (2017-10-06)
 
