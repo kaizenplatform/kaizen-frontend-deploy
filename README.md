@@ -62,7 +62,3 @@ Please follow by [SemVer](http://semver.org/) to decide the version number.
 $ git checkout master
 $ npm version [major | minor | patch] # see https://docs.npmjs.com/cli/version for more details
 ```
-
-## References
-
-- [[engineering] kaizen-frontend-deploy というコマンドラインツールを作った](https://kaizen.qiita.com/jimbo/items/6ce7278926fdccce406d)
