@@ -64,6 +64,12 @@ const awsConfigurations = [{
   description: 'Whether to skip cloudfront invalidation (default false)',
   boolean: true,
   required: false
+}, {
+  cliOption: '--invalidate-all',
+  envVar: 'INVALIDATE_ALL',
+  description: 'Whether to upload all files in cloudfront invalidation (default false)',
+  boolean: true,
+  required: false
 }];
 
 const program = new commander.Command(packageJson.name).version(packageJson.version).arguments('<local-directory>').usage(`${chalk.green('<local-directory>')} [options]`).action(dir => {
@@ -123,6 +129,7 @@ const S3_BUCKET = program.s3Bucket || process.env.S3_BUCKET;
 const S3_PREFIX = program.s3Prefix || process.env.S3_PREFIX;
 const CLOUDFRONT_DISTRIBUTION_ID = program.cloudfrontDistributionId || process.env.CLOUDFRONT_DISTRIBUTION_ID;
 const SKIP_CLOUDFRONT = program.skipCloudfront || process.env.SKIP_CLOUDFRONT;
+const INVALIDATE_ALL = program.invalidateAll || process.env.INVALIDATE_ALL;
 
 const main = (() => {
   var _ref = _asyncToGenerator(function* () {
@@ -133,7 +140,7 @@ const main = (() => {
         return;
       }
 
-      yield cloudfront.invalidate(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, CLOUDFRONT_DISTRIBUTION_ID, S3_PREFIX, uploadedFiles);
+      yield cloudfront.invalidate(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, CLOUDFRONT_DISTRIBUTION_ID, S3_PREFIX, INVALIDATE_ALL, uploadedFiles);
     } catch (e) {
       console.error(e);
     }

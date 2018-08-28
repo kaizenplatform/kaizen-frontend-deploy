@@ -4,39 +4,60 @@ const AWS = require('aws-sdk');
 const chalk = require('chalk');
 
 module.exports = {
-  invalidate: async function(awsAccessKeyId, awsSecretAccessKey, distributionId, s3Prefix = '', uploadedFiles = []) {
+  invalidate: async function(
+    awsAccessKeyId,
+    awsSecretAccessKey,
+    distributionId,
+    s3Prefix = '',
+    invalidateAll = false,
+    uploadedFiles = [],
+  ) {
     return new Promise((resolve, reject) => {
       console.log(chalk.cyan('\nInvalidating Cloudfront...'));
 
-      if (uploadedFiles.length === 0) {
-        console.log('No target files');
-        console.log('✨  Done.');
-        resolve();
-        return;
+      let paths = {};
+
+      if (invalidateAll) {
+        console.log('Invalidating all files...');
+
+        paths = {
+          Quantity: 1, // Items array length below
+          Items: ['/*'], // always invalidate all items
+        };
+      } else {
+        if (uploadedFiles.length === 0) {
+          console.log('No target files');
+          console.log('✨  Done.');
+          resolve();
+          return;
+        }
+
+        const invalidateList = uploadedFiles.map(file => {
+          return `/${file}`;
+        });
+        invalidateList.push(`/${s3Prefix}`);
+
+        console.log('Invalidation items:');
+        invalidateList.forEach(item => {
+          console.log(chalk.gray(`  ${item}`));
+        });
+
+        paths = {
+          Quantity: invalidateList.length,
+          Items: invalidateList,
+        };
       }
 
       const cloudfront = new AWS.CloudFront({
         accessKeyId: awsAccessKeyId,
         secretAccessKey: awsSecretAccessKey,
       });
-      const invalidateList = uploadedFiles.map(file => {
-        return `/${file}`;
-      });
-      invalidateList.push(`/${s3Prefix}`);
-
-      console.log('Invalidation items:');
-      invalidateList.forEach(item => {
-        console.log(chalk.gray(`  ${item}`));
-      });
 
       const params = {
         DistributionId: distributionId,
         InvalidationBatch: {
           CallerReference: Date.now().toString(),
-          Paths: {
-            Quantity: invalidateList.length,
-            Items: invalidateList,
-          },
+          Paths: paths,
         },
       };
 
