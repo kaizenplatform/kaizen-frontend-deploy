@@ -37,7 +37,9 @@ The CLI looks for AWS credentials and configuration settings in the following or
 |Command line option|Environment variable|Description|Example|
 |:--|:--|:--|:--|
 |`--s3-prefix`|`S3_PREFIX`|Prefix which is added to the s3 directory|`popup/`|
+|`--s3-delete-removed`|`S3_DELETE_REMOVED`|Whether to remove s3 objects|no value|
 |`--skip-cloudfront`|`SKIP_CLOUDFRONT`|Whether to skip cloudfront invalidation|no value|
+|`--invalidate-all`|`INVALIDATE_ALL`|Whether to upload all files in cloudfront invalidation|no value|
 
 ## Development
 
